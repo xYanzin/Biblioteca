@@ -3,7 +3,7 @@ from django.urls import path
 from django.http import JsonResponse
 
 def hello_view(resquest):
-    return JsonResponse({'message': 'Hello World'})
+    return JsonResponse({'id': 1, 'name': 'Titanic', 'year': '1999'})
 
 
 urlpatterns = [
