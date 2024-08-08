@@ -1,9 +1,5 @@
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt  # token padrão contra ataque.
-from django.shortcuts import get_object_or_404
-from genres.models import Genre
 from rest_framework import generics
+from genres.models import Genre
 from genres.serializers import GenreSerializer
 
 
@@ -12,23 +8,6 @@ class GenreCreateListView(generics.ListCreateAPIView):
     serializer_class = GenreSerializer
 
 
-@csrf_exempt
-def genre_detail_view(request, pk):
-    genre = get_object_or_404(Genre, pk=pk)
-
-    if request.method == "GET":
-        data = {"id": genre.id, "name": genre.name}
-        return JsonResponse(data)
-
-    elif request.method == "PUT":
-        data = json.loads(request.body.decode("utf-8"))
-        genre.name = data["name"]
-        genre.save()
-        return JsonResponse({"id": genre.id, "name": genre.name})
-
-    elif request.method == "DELETE":
-        genre.delete()
-        return JsonResponse(
-            {"message": "Gênero excluido com sucecsso."},
-            status=204,
-        )
+class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
